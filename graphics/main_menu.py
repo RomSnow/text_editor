@@ -13,7 +13,6 @@ class MainWindow(object):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.setWindowModality(QtCore.Qt.ApplicationModal)
         MainWindow.setFixedSize(812, 515)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
