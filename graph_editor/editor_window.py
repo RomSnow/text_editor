@@ -89,8 +89,14 @@ class EditorWindow(qt.QWidget):
                                            qt.QMessageBox.No)
 
         if question == qt.QMessageBox.Yes:
-            with open(self.file_path, 'w') as file:
-                file.write(self.edit_area.text())
+            try:
+                with open(self.file_path, 'w') as file:
+                    file.write(self.edit_area.toPlainText())
+            except FileNotFoundError:
+                question = qt.QMessageBox.question(self, 'Ошибка записи',
+                                                   'Нет доступа к файлу',
+                                                   qt.QMessageBox.Ok)
+                self.ed_close()
 
         self.is_changed = False
         self.create_mod = False

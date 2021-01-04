@@ -10,8 +10,10 @@ class UsingHistory:
 
     def _init_history(self, file: str):
         with open(file, 'r') as file:
-            for line in file:
+            for index, line in enumerate(file):
                 self._history.append(TextFile(line))
+                if index == self._lim:
+                    break
 
     def update_history(self, new_file: TextFile):
         if new_file in self._history:
@@ -25,7 +27,7 @@ class UsingHistory:
     def save_history(self):
         with open(self.history_file, 'w') as file:
             for line in self._history:
-                file.write(f'{line.path}')
+                file.write(f'{line.path}\n')
 
     @property
     def history(self) -> list:

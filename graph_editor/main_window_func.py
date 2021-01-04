@@ -1,3 +1,5 @@
+import os
+
 import PyQt5.QtWidgets as qt
 
 from graph_editor.editor_window import EditorWindow
@@ -14,6 +16,9 @@ class MainFunc:
         file_name = qt.QFileDialog.getOpenFileName(self.main_window,
                                                    'Открыть файл')
 
+        if not file_name:
+            return
+
         text_file = TextFile(file_name[0])
         self.main_window.open_docs.update({
             file_name[0]: EditorWindow(text_file,
@@ -25,11 +30,20 @@ class MainFunc:
     def create_button_func(self):
         dir_name = qt.QFileDialog.getExistingDirectory(self.main_window,
                                                        'Выберете папку')
+        if not dir_name:
+            return
         file_name = qt.QInputDialog.getText(self.main_window, 'Имя файла',
                                             'Введите имя файла:')
-        file_path = dir_name[0] + file_name[0]
+        if not file_name or not file_name[0]:
+            return
+        file_path = f'{dir_name}/{file_name[0]}'
+
+        if os.path.isfile(file_path):
+            self._error_message()
+            return
 
         text_file = TextFile(file_path)
+        open(file_path, 'w').close()
         self.main_window.open_docs.update({
             file_path: EditorWindow(text_file,
                                     self.main_window, True)
@@ -56,3 +70,8 @@ class MainFunc:
     def _remove_old_buttons(self):
         for button in self.current_old_buttons:
             button.close()
+
+    def _error_message(self):
+        self.msg = qt.QMessageBox.question(self.main_window, 'Создание файла',
+                                           'Файл уже существует',
+                                           qt.QMessageBox.Ok)
