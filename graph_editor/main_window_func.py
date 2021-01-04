@@ -17,12 +17,18 @@ class MainFunc:
             file_name = qt.QFileDialog.getOpenFileName(self.main_window,
                                                        'Открыть файл')
 
-            if not file_name:
+            if not file_name[0]:
                 return
         else:
             file_name = ('test.txt', True)
 
-        text_file = TextFile(file_name[0])
+        try:
+            text_file = TextFile(file_name[0])
+        except TypeError:
+            qt.QMessageBox.question(self.main_window, 'Ошибка',
+                                    'Неподдерживаемы формат файла',
+                                    qt.QMessageBox.Ok)
+            return
         self.main_window.open_docs.update({
             file_name[0]: EditorWindow(text_file,
                                        self.main_window)
@@ -50,8 +56,8 @@ class MainFunc:
             self._error_message()
             return
 
-        text_file = TextFile(file_path)
         open(file_path, 'w').close()
+        text_file = TextFile(file_path)
         self.main_window.open_docs.update({
             file_path: EditorWindow(text_file,
                                     self.main_window, True)

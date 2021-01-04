@@ -1,0 +1,2 @@
+/home/ird-pc/get.py
+/home/ird-pc/my.file

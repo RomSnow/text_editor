@@ -5,8 +5,8 @@ class UsingHistory:
     def __init__(self, history_file: str, hist_lim: int):
         self._history = list()
         self.history_file = history_file
-        self._init_history(history_file)
         self._lim = hist_lim
+        self._init_history(history_file)
 
     def _init_history(self, file: str):
         with open(file, 'r') as file:
