@@ -11,6 +11,8 @@ class UsingHistory:
     def _init_history(self, file: str):
         with open(file, 'r') as file:
             for index, line in enumerate(file):
+                if not line.strip('\n'):
+                    break
                 self._history.append(TextFile(line))
                 if index == self._lim:
                     break
