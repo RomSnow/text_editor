@@ -1,7 +1,7 @@
 import sys
 import PyQt5.QtWidgets as qt
 
-from graphics.main_menu import MainWindow
+from graph_editor.main_menu import MainWindow
 
 
 def main():

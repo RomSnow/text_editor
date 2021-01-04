@@ -1,0 +1,1 @@
+/home/ird-pc/Projects/Python/Editor/text_editor/README.md/home/ird-pc/Projects/Python/Editor/text_editor/text_editor.py

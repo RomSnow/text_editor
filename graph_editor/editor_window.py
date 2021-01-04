@@ -1,13 +1,16 @@
 import PyQt5.QtWidgets as qt
 
+from graph_editor.file import TextFile
+
 
 class EditorWindow(qt.QWidget):
-    def __init__(self, file: str,
+    def __init__(self, file: TextFile,
                  main_window,
                  create_mod=False):
         super().__init__()
         self.create_mod = create_mod
-        self.file = file
+        self.file_path = file.path
+        self.short_file_name = file.short_name
         self.main_window = main_window
         self._init_ui()
         self.show()
@@ -16,7 +19,7 @@ class EditorWindow(qt.QWidget):
 
     def _init_ui(self):
         self.resize(600, 800)
-        self.setWindowTitle(self.file)
+        self.setWindowTitle(self.short_file_name)
 
         main_layout = qt.QVBoxLayout()
 
@@ -44,7 +47,7 @@ class EditorWindow(qt.QWidget):
         self.setLayout(main_layout)
 
     def _get_current_text(self) -> str:
-        with open(self.file, 'r') as file:
+        with open(self.file_path, 'r') as file:
             text = file.read()
 
         return text
@@ -86,7 +89,7 @@ class EditorWindow(qt.QWidget):
                                            qt.QMessageBox.No)
 
         if question == qt.QMessageBox.Yes:
-            with open(self.file, 'w') as file:
+            with open(self.file_path, 'w') as file:
                 file.write(self.edit_area.text())
 
         self.is_changed = False
@@ -94,10 +97,11 @@ class EditorWindow(qt.QWidget):
 
     def ed_close(self, is_myself=True):
         if is_myself:
-            self.main_window.open_docs.pop(self.file)
+            self.main_window.open_docs.pop(self.file_path)
         self.close()
 
     def closeEvent(self, a0):
+        self.main_window.history.save_history()
         if self.is_changed:
             self._save_text()
 
