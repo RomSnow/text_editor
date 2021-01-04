@@ -1,1 +1,2 @@
-
+/home/ird-pc/Projects/Python/Editor/text_editor/requirements.txt
+/home/ird-pc/my.file

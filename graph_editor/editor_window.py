@@ -94,9 +94,13 @@ class EditorWindow(qt.QWidget):
             return
 
         if file_name[0] in os.listdir(dir_name):
-            qt.QMessageBox.question(self,
-                                    'Ошибка', 'Такой файл уже существует',
-                                    qt.QMessageBox.Ok)
+            ans = qt.QMessageBox.question(
+                self,
+                'Ошибка',
+                'Такой файл уже существует\nПерезаписать?',
+                qt.QMessageBox.Yes, qt.QMessageBox.No)
+            if ans == qt.QMessageBox.No:
+                return
 
         file_path = f'{dir_name}/{file_name[0]}'
         with open(file_path, 'w') as file:
