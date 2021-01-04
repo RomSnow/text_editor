@@ -7,7 +7,7 @@ class TextFile:
         self._short_name = self._get_short_name()
 
     def _get_short_name(self) -> str:
-        match = re.findall(r'[/\\]([\w\d]+?[.]?[\w\d]+?)$', self._file_path)
+        match = re.findall(r'[/\\]?([\w\d]+?[.]?[\w\d]+?)$', self._file_path)
         return match[0]
 
     @property

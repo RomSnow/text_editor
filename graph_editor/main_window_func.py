@@ -13,11 +13,14 @@ class MainFunc:
         self.current_old_buttons = list()
 
     def open_button_func(self):
-        file_name = qt.QFileDialog.getOpenFileName(self.main_window,
-                                                   'Открыть файл')
+        if not self.main_window.is_debug:
+            file_name = qt.QFileDialog.getOpenFileName(self.main_window,
+                                                       'Открыть файл')
 
-        if not file_name:
-            return
+            if not file_name:
+                return
+        else:
+            file_name = ('test.txt', True)
 
         text_file = TextFile(file_name[0])
         self.main_window.open_docs.update({
@@ -28,17 +31,22 @@ class MainFunc:
         self.init_last_uses()
 
     def create_button_func(self):
-        dir_name = qt.QFileDialog.getExistingDirectory(self.main_window,
-                                                       'Выберете папку')
-        if not dir_name:
-            return
-        file_name = qt.QInputDialog.getText(self.main_window, 'Имя файла',
-                                            'Введите имя файла:')
-        if not file_name or not file_name[0]:
-            return
+        if not self.main_window.is_debug:
+            dir_name = qt.QFileDialog.getExistingDirectory(self.main_window,
+                                                           'Выберете папку')
+            if not dir_name:
+                return
+            file_name = qt.QInputDialog.getText(self.main_window, 'Имя файла',
+                                                'Введите имя файла:')
+            if not file_name or not file_name[0]:
+                return
+        else:
+            dir_name = os.path.dirname(__file__)
+            file_name = ('test.my', True)
+
         file_path = f'{dir_name}/{file_name[0]}'
 
-        if os.path.isfile(file_path):
+        if os.path.isfile(file_path) and not self.main_window.is_debug:
             self._error_message()
             return
 

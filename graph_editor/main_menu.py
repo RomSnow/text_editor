@@ -8,9 +8,10 @@ from graph_editor.main_window_func import MainFunc
 class MainWindow(object):
     def __init__(self):
         self.main_window = QtWidgets.QMainWindow()
+        self.main_window.is_debug = False
         self.main_window.open_docs = dict()
         self.main_window.history = UsingHistory(
-            f'{os.path.dirname(__file__)}/hist.txt', 4)
+            f'{os.path.dirname(__file__)}/hist.txt', 6)
         self.main_window.main_func = MainFunc(self.main_window)
         self.setupUi(self.main_window)
         self.main_window.main_func.init_last_uses()
