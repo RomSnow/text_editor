@@ -1,3 +1,5 @@
+import os
+
 import PyQt5.QtWidgets as qt
 
 from graph_editor.file import TextFile
@@ -33,6 +35,9 @@ class EditorWindow(qt.QWidget):
         save_button = qt.QPushButton('Сохранить')
         save_button.clicked.connect(self._save_text)
 
+        save_as_button = qt.QPushButton('Сохранить как')
+        save_as_button.clicked.connect(self._save_as)
+
         back_button = qt.QPushButton('Отменить изменения')
         back_button.clicked.connect(self._back_text)
 
@@ -40,6 +45,7 @@ class EditorWindow(qt.QWidget):
         close_button.clicked.connect(self.ed_close)
 
         button_layout.addWidget(save_button)
+        button_layout.addWidget(save_as_button)
         button_layout.addWidget(back_button)
         button_layout.addWidget(close_button)
 
@@ -76,6 +82,32 @@ class EditorWindow(qt.QWidget):
             self.is_changed = True
         else:
             self.is_start = False
+
+    def _save_as(self):
+        dir_name = qt.QFileDialog.getExistingDirectory(self.main_window,
+                                                       'Выберете папку')
+        if not dir_name:
+            return
+        file_name = qt.QInputDialog.getText(self.main_window, 'Имя файла',
+                                            'Введите имя файла:')
+        if not file_name or not file_name[0]:
+            return
+
+        if file_name[0] in os.listdir(dir_name):
+            qt.QMessageBox.question(self,
+                                    'Ошибка', 'Такой файл уже существует',
+                                    qt.QMessageBox.Ok)
+
+        file_path = f'{dir_name}/{file_name[0]}'
+        with open(file_path, 'w') as file:
+            file.write(self.edit_area.toPlainText())
+
+        new_file = TextFile(file_path)
+        self.file_path = new_file.path
+        self.short_file_name = new_file.short_name
+        self.main_window.history.update_history(new_file)
+        self.main_window.main_func.init_last_uses()
+        self.setWindowTitle(self.short_file_name)
 
     def _save_text(self):
         if not self.is_changed:
